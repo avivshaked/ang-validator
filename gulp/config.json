@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "src": [
+      "./src/app.js",
+      "./src/**/*.js"
+    ],
+    "dest": "dist",
+    "destName": "ang-validator.js"
+  }
+}

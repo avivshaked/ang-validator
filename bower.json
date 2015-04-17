@@ -1,0 +1,26 @@
+{
+  "name": "ang-validator",
+  "version": "0.1.0",
+  "authors": [
+    "aviv <shaked.aviv1@gmail.com>"
+  ],
+  "description": "Angular wrapper for chriso's validator.js",
+  "main": "./dist/ang-validator.js",
+  "keywords": [
+    "angular",
+    "form",
+    "validator",
+    "sanitizer"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "validator-js": "~3.38.0"
+  }
+}
