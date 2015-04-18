@@ -2,7 +2,7 @@
 An angular wrapper for chriso's [validator.js](https://github.com/chriso/validator.js).
 
 An angular wrapper for chriso's validator.js . 
-It wrappes all of validator.js functionality into easy to use angular directives. 
+It wraps all of validator.js functionality into easy to use angular directives. 
 It also provides a simple way to add custom angular validators and sanitizers.
 
 ## How to include ##
@@ -95,7 +95,7 @@ The expression can also be in the form of an object, with direct values or with 
 	<input name="homepage" ng-model="ctrl.homepage" ngv-is-url="{protocols: ctrl.allowedProtocolsArray, allow_trailing_dot: true}">
 
 
-## ang-validator sanitizers directives ##
+## ang-validator sanitizer directives ##
 All of validator.js sanitizers have a correlating angular directive. All the directives have an "ngs" prefix, and then a normalized version of the original method. For example "toInt" is ngs-to-int, and "normalizeEmail" is ngs-normalize-email.
 **To use the directives**, add them as attribute to an input that has an ng-model directive.
 Example:
