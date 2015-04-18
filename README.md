@@ -129,7 +129,7 @@ The expression can also be in the form of an object, with direct values or with 
 	- **allow_display_name**: boolean Default: false. If set to true, the validator will also match Display Name `<email-address>`
 	- **allow_utf8_local_part**: boolean Default: true. If set to false, the validator will not allow any non-English UTF8 character in email address' local part. 
  - Example1: `<input ng-model=value" ngv-is-email>`
- - Example2: `<input ng-model=value" ngv-is-email="{require_tld: false, host_blacklist: ctrl.hostBlacklist}">`
+ - Example2: `<input ng-model=value" ngv-is-email="{allow_utf8_local_part: false}">`
  
 **isURL** - 
  
