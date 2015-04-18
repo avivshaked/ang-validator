@@ -9,7 +9,8 @@
 		]);
 	function DirectiveNormalizer () {
 		return {
-			convertMethodNameToDirectiveName: convertMethodNameToDirectiveName
+			convertMethodNameToDirectiveName: convertMethodNameToDirectiveName,
+			fromCamelCase: fromCamelCase
 		};
 
 		/**
@@ -75,6 +76,38 @@
 			}
 
 			return prefix + processedChars.join('');
+		}
+
+		function fromCamelCase (str) {
+
+			// VALIDATIONS
+			var _errMsg = _ErrHead + 'fromCamelCase: ';
+
+			if (angular.isUndefined(str)) {
+				throw new ReferenceError(_errMsg + 'str argument must be provided');
+			}
+			if (!angular.isString(str)) {
+				throw new TypeError(_errMsg + 'str argument must be a string');
+			}
+			if (str === '') {
+				throw new RangeError(_errMsg + 'str argument must not be an empty string');
+			}
+
+			var i;
+			var originalChars = str.split('');
+			var processedChars = [];
+
+			processedChars[0] = originalChars[0].toLowerCase();
+			for (i=1; i<originalChars.length; i+=1) {
+				if (originalChars[i] === originalChars[i].toUpperCase()) {
+					processedChars.push('-');
+					processedChars.push(originalChars[i].toLowerCase());
+				} else {
+					processedChars.push(originalChars[i]);
+				}
+			}
+
+			return processedChars.join('');
 		}
 	}
 }());
