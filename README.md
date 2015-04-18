@@ -502,4 +502,25 @@ If you want to add multiple validator directives you can use $validatorBuilder.b
     		]);
 
 	
+You can use $validator.extend method to expand the functionality of validator.js. This makes the code more testable.
 
+		angular.module('myApp')
+    		.run([
+    		    '$validator',
+    			'$validatorBuilder',
+    			function ($validator, $validatorBuilder) {
+    			
+    			    // This will allow you to unit test the validator without having to inject it in an element.
+    			    // It also adheres to the separation of control principle.
+    			    $validator.extend('eight', function (val) {
+    			        return val===8;
+    			    });
+    			    
+    			    
+    				$validatorBuilder.buildValidator({
+    					directiveName: 'eight',
+    					validatorName: 'eight',
+    					validator: $validator.eight
+    				});
+    			}
+    		]);
