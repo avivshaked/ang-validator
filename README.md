@@ -415,3 +415,91 @@ The expression can also be in the form of an object, with direct values or with 
 	- **allow_space_after_digits**: boolean Default: false
  - Example1: `<input ng-model=value" ngv-is-currency>`
  - Example2: `<input ng-model=value" ngv-is-currency="{symbol: 'EU', allow_space_after_symbol: true}">`
+ 
+### Adding custom validators ###
+This feature has two advantages to angular's own mechanism. It can be added on the fly (though it is not recommended. It's best to add validators at run phase). The other advantage is its simplicity.
+Using $validatorBuilder.buildValidator method, you need to pass an object that has 3 parameters:
+
+ - directiveName: {string} will be normalized. i.e. ngDirective will be normalized to ng-directive.
+ - validatorName: {string} Will remain as is in the model, and will be normalized in the class names. i.e. "validatorName" will remain "validatorName" on the $error object, and will be ng-valid-validator-name and ng-invalid-validator-name classes.
+ - validator: {function} the function takes ({*}value, {*=} option) or if passed an array as option then ({*} value, [arg1 ...[, args]]). The function needs to return a boolean. True means valid. False means invalid.
+
+example1: eight.
+
+Say we would want a validator that is valid when an input equals 8
+
+	angular.module('myApp')
+		.run([
+			'$validatorBuilder',
+			function ($validatorBuilder) {
+				$validatorBuilder.buildValidator({
+					directiveName: 'eight',
+					validatorName: 'eight',
+					validator: function (val) {
+						return val===8;
+					}
+				});
+			}
+		]);
+
+
+example2: between.
+
+Say we would want a validator that is valid when an number is between min and max
+
+	angular.module('myApp')
+		.run([
+			'$validatorBuilder',
+			function ($validatorBuilder) {
+			
+				// First way to do it
+				$validatorBuilder.buildValidator({
+					directiveName: 'isBetween',
+					validatorName: 'between',
+					validator: function (val, min, max) {
+						return val >= min && val <= max;
+					}
+				});
+				
+				// Second way to do it
+				$validatorBuilder.buildValidator({
+                    directiveName: 'isBetween',
+                    validatorName: 'between',
+                    validator: function (val, options) {
+                        return val >= options.min && val <= options.max;
+                    }
+                });
+			}
+		]);
+		
+The difference in the two ways to do it is expressed in the way that options are passed in the html markup
+
+	<input ng-model="value" is-between="[3,7]" > // This is used for the first way
+	<input ng-model="value" is-between="{min: 3, max: 7}" > // This is used for the second way
+	
+If you want to add multiple validator directives you can use $validatorBuilder.buildValidators which takes an array of the validator objects.
+
+		angular.module('myApp')
+    		.run([
+    			'$validatorBuilder',
+    			function ($validatorBuilder) {
+    				$validatorBuilder.buildValidators([
+	                    {
+	                        directiveName: 'eight',
+	                        validatorName: 'eight',
+	                        validator: function (val) {
+	                            return val===8;
+	                        }
+	                    },
+	                    {
+                            directiveName: 'isBetween',
+                            validatorName: 'between',
+                            validator: function (val, min, max) {
+                                return val >= min && val <= max;
+                        }
+    				]);
+    			}
+    		]);
+
+	
+
