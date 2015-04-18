@@ -1,6 +1,8 @@
 describe('$validatorBuilder', function () {
 
 	var $validatorBuilder;
+	var $rootScope;
+	var $compile;
 
 
 
@@ -10,8 +12,10 @@ describe('$validatorBuilder', function () {
 		angular.module('ang-validator');
 	});
 
-	beforeEach(inject(function (_$validatorBuilder_) {
+	beforeEach(inject(function (_$validatorBuilder_, _$rootScope_, _$compile_) {
 		$validatorBuilder = _$validatorBuilder_;
+		$rootScope = _$rootScope_;
+		$compile = _$compile_;
 	}));
 
 	describe('instance', function () {
@@ -96,7 +100,7 @@ describe('$validatorBuilder', function () {
 
 		beforeEach(function () {
 			spyOn($validatorBuilder, '_validateBuildConfig');
-			spyOn($validatorBuilder, '_validatorDirective');
+			spyOn($validatorBuilder.$compileProvider, 'directive');
 			oConfig = {
 				directiveName: 'test',
 				validatorName: 'test',
@@ -108,6 +112,92 @@ describe('$validatorBuilder', function () {
 			$validatorBuilder.buildValidator(oConfig);
 			expect($validatorBuilder._validateBuildConfig).toHaveBeenCalledWith(oConfig);
 		});
+
+		it('should invoke $compileProvider.directive', function () {
+			$validatorBuilder.buildValidator(oConfig);
+			expect($validatorBuilder.$compileProvider.directive).toHaveBeenCalled();
+			expect($validatorBuilder.$compileProvider.directive.calls.allArgs()[0][0]).toBe('test');
+		});
+	});
+
+	describe('creating a directive', function () {
+
+		var oConfig;
+		var element;
+		var scope;
+
+		beforeEach(function () {
+			oConfig = {
+				directiveName: 'ngvTest',
+				validatorName: 'test',
+				validator: function (val, conf) {
+					return val === conf;
+				}
+			};
+			$validatorBuilder.buildValidator(oConfig);
+
+
+
+		});
+
+		it('should throw if ng-model is not provided', function () {
+			var testFunc = function () {
+				element = angular.element('<input ngv-test>');
+				scope = $rootScope.$new();
+				element = $compile(element)(scope);
+				scope.$digest();
+			};
+			expect(testFunc).toThrow();
+		});
+
+		it('should add class ng-valid-test to element', function () {
+			element = angular.element('<input ng-model="model" ngv-test>');
+			scope = $rootScope.$new();
+			element = $compile(element)(scope);
+			scope.$digest();
+			expect(element.hasClass('ng-valid-test')).toBe(true);
+		});
+
+		it('should invoke validator function with the value set to the model and config value', function () {
+			spyOn(oConfig, 'validator');
+			element = angular.element('<input ng-model="model" ngv-test="testObj">');
+			scope = $rootScope.$new();
+			scope.testObj = {
+				test: 'object'
+			};
+			element = $compile(element)(scope);
+			scope.$digest();
+			element.controller('ngModel').$setViewValue('test');
+			expect(oConfig.validator).toHaveBeenCalledWith('test', scope.testObj);
+		});
+
+		it('should have ng-invalid-test when given a value different from conf', function () {
+			element = angular.element('<input ng-model="model" ngv-test="\'test\'">');
+			scope = $rootScope.$new();
+			element = $compile(element)(scope);
+			scope.$digest();
+			element.controller('ngModel').$setViewValue('not test');
+			expect(element.hasClass('ng-invalid-test')).toBe(true);
+		});
+
+		it('should have ng-valid-test when given a value that equals conf', function () {
+			element = angular.element('<input ng-model="model" ngv-test="\'test\'">');
+			scope = $rootScope.$new();
+			element = $compile(element)(scope);
+			scope.$digest();
+			element.controller('ngModel').$setViewValue('test');
+			expect(element.hasClass('ng-valid-test')).toBe(true);
+		});
+
+		it('should have ng-invalid-test before being given a value if ngv-required attribute is present', function () {
+			element = angular.element('<input ng-model="model" ngv-test="\'test\'" ngv-required="true">');
+			scope = $rootScope.$new();
+			element = $compile(element)(scope);
+			scope.$digest();
+			expect(element.hasClass('ng-invalid-test')).toBe(true);
+		})
+
+
 	});
 
 

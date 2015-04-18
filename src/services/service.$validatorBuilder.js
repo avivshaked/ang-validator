@@ -90,10 +90,10 @@
 				 * @returns {*}
 				 * @description
 				 * The validator function of the validator directive.
-				 * It first verifies that val exists, or that the
+				 * It first verifies that val exists, or that one of the attributes is ngvRequired
 				 */
 				function validatorFunc (val) {
-					if (element[0].required || val) {
+					if (val || attr.ngvRequired) {
 						var arg = scope.$eval(attr[oConfig.directiveName]);
 						return oConfig.validator(val, arg);
 					}
@@ -119,7 +119,7 @@
 				self.$compileProvider.directive(oConfig.directiveName, self._validatorDirective.bind(self, oConfig));
 
 			}
-		};
+		}
 	}
 
 
