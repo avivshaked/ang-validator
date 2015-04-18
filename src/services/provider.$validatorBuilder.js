@@ -102,6 +102,12 @@
 				function validatorFunc (val) {
 					if (val || attr.ngvRequired) {
 						var arg = scope.$eval(attr[oConfig.directiveName]);
+						if (angular.isArray(arg)) {
+							var args = [];
+							args.push(val);
+							args = args.concat(arg);
+							return oConfig.validator.apply(this, args);
+						}
 						return oConfig.validator(val, arg);
 					}
 
