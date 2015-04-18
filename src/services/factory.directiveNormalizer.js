@@ -55,12 +55,12 @@
 			// The reason for this is - you dont want angular to normalize isURL method to is-u-r-l bu to isUrl or with prefix
 			// ngvIsUrl
 			for (i=1; i<originalChars.length; i+=1) {
-				if (originalChars[i] === originalChars[i].toUpperCase()) {
+				if (/[a-zA-Z]/.test(originalChars[i]) && originalChars[i] === originalChars[i].toUpperCase()) {
 					if (lastIsUppercase) {
 						// This checks if there are any more chars. If there are we need to verify that the next one is not
 						// a lowercase char. If it is, this chat must remain capitalized.
 						// example: isURLValid should be converted to isUrlValid and not isUrlvalid
-						if (i+1 < originalChars.length && originalChars[i+1] === originalChars[i+1].toLowerCase()) {
+						if (i+1 < originalChars.length && /[a-zA-Z]/.test(originalChars[i+1]) && originalChars[i+1] === originalChars[i+1].toLowerCase()) {
 							processedChars.push(originalChars[i]);
 						} else {
 							processedChars.push(originalChars[i].toLowerCase());
@@ -99,7 +99,7 @@
 
 			processedChars[0] = originalChars[0].toLowerCase();
 			for (i=1; i<originalChars.length; i+=1) {
-				if (originalChars[i] === originalChars[i].toUpperCase()) {
+				if (/[a-zA-Z]/.test(originalChars[i]) && originalChars[i] === originalChars[i].toUpperCase()) {
 					processedChars.push('-');
 					processedChars.push(originalChars[i].toLowerCase());
 				} else {
