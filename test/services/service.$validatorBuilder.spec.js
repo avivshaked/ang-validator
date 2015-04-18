@@ -200,5 +200,60 @@ describe('$validatorBuilder', function () {
 
 	});
 
+	describe('buildDirectives', function () {
+
+		var oConfig1, oConfig2, oConfig3;
+		var arrConfig;
+
+		beforeEach(function () {
+			oConfig1 = {};
+			oConfig2 = {};
+			oConfig3 = {};
+			arrConfig = [oConfig1, oConfig2, oConfig3];
+
+			spyOn($validatorBuilder, 'buildValidator');
+			spyOn($validatorBuilder.internalValidation, 'validateObject');
+
+		});
+
+		it('should invoke $validatorBuilder.internalValidation.validateObject', function () {
+			spyOn(angular, 'isArray').and.returnValue(true);
+
+			$validatorBuilder.buildValidators(arrConfig);
+			expect($validatorBuilder.internalValidation.validateObject).toHaveBeenCalled();
+		});
+
+		it('should invoke angular.isArray with arrConfig ', function () {
+			spyOn(angular, 'isArray').and.returnValue(true);
+
+			$validatorBuilder.buildValidators(arrConfig);
+			expect(angular.isArray).toHaveBeenCalledWith(arrConfig);
+		});
+
+		it('should throw Type error if angular.isArray returns false', function () {
+			spyOn(angular, 'isArray').and.returnValue(false);
+
+			var err;
+			try {
+				$validatorBuilder.buildValidators(arrConfig);
+			} catch (e) {
+				err = e;
+			}
+			expect(err instanceof TypeError).toBe(true);
+		});
+
+		it('should invoke $validatorBuilder 3 times, and with oConfig1, oConfig2, oConfig3 respectivly', function () {
+			spyOn(angular, 'isArray').and.returnValue(true);
+
+			$validatorBuilder.buildValidators(arrConfig);
+			expect($validatorBuilder.buildValidator.calls.count()).toBe(3);
+			expect($validatorBuilder.buildValidator.calls.allArgs()[0][0]).toBe(oConfig1);
+			expect($validatorBuilder.buildValidator.calls.allArgs()[1][0]).toBe(oConfig2);
+			expect($validatorBuilder.buildValidator.calls.allArgs()[2][0]).toBe(oConfig3);
+
+		});
+
+	});
+
 
 });

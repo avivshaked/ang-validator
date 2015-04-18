@@ -32,7 +32,14 @@
 				 * @description
 				 * Builds a new validator directive
 				 */
-				buildValidator      : buildValidator
+				buildValidator      : buildValidator,
+				/**
+				 *
+				 * @param {Array<{directiveName: string, validatorName: string, validator: function}>} arrConfig
+				 * @description
+				 * Builds multiple new validator directives
+				 */
+				buildValidators: buildValidators
 			};
 
 			return new ValidatorBuilder();
@@ -117,6 +124,27 @@
 
 				// Declare a new directive
 				self.$compileProvider.directive(oConfig.directiveName, self._validatorDirective.bind(self, oConfig));
+
+			}
+
+			/**
+			 *
+			 * @param {Array<{directiveName: string, validatorName: string, validator: function}>} arrConfig
+			 * @description
+			 * Builds multiple new validator directives
+			 */
+			function buildValidators (arrConfig) {
+				var self = this;
+				var _errMsg = _errHead + 'buildValidators: arrConfig';
+				// Validate arr config
+				self.internalValidation.validateObject(arrConfig, _errMsg);
+				if (!angular.isArray(arrConfig)) {
+					throw new TypeError(_errMsg + ' should be an array');
+				}
+
+				arrConfig.forEach(function (oConfig) {
+					self.buildValidator(oConfig);
+				});
 
 			}
 		}
