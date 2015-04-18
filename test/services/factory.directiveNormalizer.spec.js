@@ -66,4 +66,53 @@ describe('directiveNormalizer', function () {
 
 	});
 
+	describe('convertMethodNameToDirectiveName', function () {
+
+		it('should throw ReferenceError if str is not provided', function () {
+
+			var err;
+			try {
+				directiveNormalizer.fromCamelCase();
+			} catch (e) {
+				err = e;
+			}
+			expect(err instanceof ReferenceError).toBe(true);
+		});
+
+		it('should throw TypeError if methodName is not a string', function () {
+
+			var err;
+			try {
+				directiveNormalizer.fromCamelCase(1);
+			} catch (e) {
+				err = e;
+			}
+			expect(err instanceof TypeError).toBe(true);
+		});
+
+		it('should throw RangeError if methodName is an empty string', function () {
+
+			var err;
+			try {
+				directiveNormalizer.fromCamelCase('');
+			} catch (e) {
+				err = e;
+			}
+			expect(err instanceof RangeError).toBe(true);
+		});
+
+		it('should convert a lowercase string with no prefix into the same string', function () {
+			var result = directiveNormalizer.fromCamelCase('test');
+			expect(result).toBe('test');
+		});
+
+		it('should convert a camel case string into a dash delimited lowercase string', function () {
+			var result = directiveNormalizer.fromCamelCase('isUrl');
+			expect(result).toBe('is-url');
+			var result = directiveNormalizer.fromCamelCase('isUrlValid');
+			expect(result).toBe('is-url-valid');
+		});
+
+	});
+
 });
