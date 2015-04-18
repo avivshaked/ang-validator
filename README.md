@@ -1,10 +1,10 @@
-## ang-validator.js ##
+# ang-validator.js #
 An angular wrapper for chriso's [validator.js](https://github.com/chriso/validator.js).
 
 This library offers all of validator.js functionality wrapped into easy to use angular directives.
 All of the functionality can be accessed via $validator service, or via directives.
 
-### How to include ###
+## How to include ##
 First reference chriso's validator.js
 Then reference ang-validator.js
 
@@ -16,7 +16,7 @@ In you module reference ang-validator.js
     angular.module('myApp', ['ang-validator']);
 
 
-### How to access validator.js functionality ###
+## How to access validator.js functionality ##
 Any of validator.js functionality is available via $validator service. 
 Inject the service anywhere, and call the methods you need.
 
@@ -46,7 +46,7 @@ Example with options:
     	    
 For any information on chriso's [validator.js](https://github.com/chriso/validator.js) please check out the git.
 
-### ang-validator validator directives ###
+## ang-validator validator directives ##
 All of validator.js validators have a correlating angular directive. All the directives have an "ngv" prefix, and then a normalized version of the original method. For example "equals" is ngv-equals, and isURL is ngv-is-url.
 **To use the directives**, add them as attribute to an input that has an ng-model directive.
 Example:
@@ -94,7 +94,7 @@ The expression can also be in the form of an object, with direct values or with 
 	<input name="homepage" ng-model="ctrl.homepage" ngv-is-url="{protocols: ctrl.allowedProtocolsArray, allow_trailing_dot: true}">
 
 
-#### **Directives** ####
+### **Directives** ###
 **equals** - 
 
  - Description: check if the string matches the comparison.
@@ -416,7 +416,7 @@ The expression can also be in the form of an object, with direct values or with 
  - Example1: `<input ng-model=value" ngv-is-currency>`
  - Example2: `<input ng-model=value" ngv-is-currency="{symbol: 'EU', allow_space_after_symbol: true}">`
  
-### Adding custom validators ###
+## Adding custom validators ##
 This feature has two advantages to angular's own mechanism. It can be added on the fly (though it is not recommended. It's best to add validators at run phase). The other advantage is its simplicity.
 Using $validatorBuilder.buildValidator method, you need to pass an object that has 3 parameters:
 
