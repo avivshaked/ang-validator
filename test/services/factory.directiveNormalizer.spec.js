@@ -59,7 +59,6 @@ describe('directiveNormalizer', function () {
 		});
 
 		it('should convert a string with a series of capital letters followed by regular word and prefiex into a camelCase string', function () {
-			debugger;
 			var result = directiveNormalizer.convertMethodNameToDirectiveName('testMEImWEIRD', 'ngv');
 			expect(result).toBe('ngvTestMeImWeird');
 		});
