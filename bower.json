@@ -1,8 +1,8 @@
 {
   "name": "ang-validator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "authors": [
-    "aviv <shaked.aviv1@gmail.com>"
+    "Aviv Shaked <shaked.aviv1@gmail.com>"
   ],
   "description": "Angular wrapper for chriso's validator.js",
   "main": "./dist/ang-validator.js",
