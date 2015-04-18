@@ -3,10 +3,12 @@ describe('$validator', function () {
 	var $injector;
 	var validator;
 	var $validator;
+	var $ValidatorConstructor;
 
 	beforeEach(module('ang-validator'));
 	beforeEach(inject(function (_$injector_) {
 		$injector = _$injector_;
+		$ValidatorConstructor = $injector.get('$ValidatorConstructor');
 	}));
 
 	describe('validations', function () {
@@ -24,7 +26,7 @@ describe('$validator', function () {
 		it('should throw Reference error when trying to instantiate', function () {
 			var err;
 			try {
-				$injector.get('$validator');
+				$injector.instantiate($ValidatorConstructor);
 			} catch (e) {
 				err = e;
 			}
@@ -36,7 +38,7 @@ describe('$validator', function () {
 			var err;
 			window.validator = {};
 			try {
-				$injector.get('$validator');
+				$injector.instantiate($ValidatorConstructor);
 			} catch (e) {
 				err = e;
 			}
@@ -54,7 +56,7 @@ describe('$validator', function () {
 				}
 			};
 			try {
-				$injector.get('$validator');
+				$injector.instantiate($ValidatorConstructor);
 			} catch (e) {
 				err = e;
 			}
