@@ -6,8 +6,45 @@
 </head>
 <body ng-app="myApp">
 
-<input test-directive ngv-test="{option1: '1', options2: 2}" ng-model="model">
+<!--<form name="myForm" ng-controller="Ctrl as ctrl">-->
+	<!--<label>-->
+		<!--Enter your email:-->
+		<!--<input type="text"-->
+			<!--name="email"-->
+			<!--ng-model="email"-->
+			<!--ngv-is-email-->
+			<!--ngv-required="true"-->
+			<!--required />-->
+	<!--</label>-->
+
+	<!--{{myForm.email | json}}-->
+	<!--<div style="color:maroon" role="alert" ng-messages="myForm.email.$error" >-->
+		<!--<div ng-message="required">You did not enter an email</div>-->
+		<!--<div ng-message="isEmail">This is not a valid email</div>-->
+	<!--</div>-->
+<!--</form>-->
+
+<form name="myForm" ng-controller="Ctrl as ctrl">
+	<input ng-model="email" name="userEmail" ngv-is-email>
+	<p ng-show="myForm.userEmail.$error.isEmail">Not a valid email</p>
+	<br>
+	<label> What is the meaning of life?
+		<input name="answer" ng-model="userAnswer" ngv-equals="42" ngv-required="true">
+		<p ng-show="!myForm.answer.$error.equals">Right!</p>
+	</label>
+	<input name="test" ng-model="test" ngt-test="['a', 'b']" >
+	<br>
+	<label>test matches</label>
+	<input ng-model="value" ngv-matches="'hello/i'">
+	<br>
+	<label>test isIn</label>
+	<input ng-model="isInModel" ngv-is-in="[1,2,3,5]">
+</form>
+
+
 <script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-messages/angular-messages.js"></script>
+<script src="../bower_components/validator-js/validator.js"></script>
 <script src="../dist/ang-validator.js"></script>
 <script src="app.js"></script>
 
