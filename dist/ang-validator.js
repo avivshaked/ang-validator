@@ -7,12 +7,48 @@
 (function () {
 	'use strict';
 
+
+	angular.module('ang-validator')
+		.run([
+			'$validator',
+			'$validatorBuilder',
+			function ($validator, $validatorBuilder) {
+
+				function capitalizeFirstLetter(string) {
+					return string.charAt(0).toUpperCase() + string.slice(1);
+				}
+
+				function buildValidatorsArray () {
+					var methodNames = ['equals', 'contains', 'matches', 'isEmail', 'isURL', 'isFQDN', 'isIP',
+						'isAlpha', 'isNumeric', 'isAlphanumeric', 'isBase64', 'isHexadecimal', 'isHexColor', 'isLowercase',
+						'isUppercase', 'isInt', 'isFloat', 'isDivisibleBy', 'isNull', 'isLength', 'isByteLength', 'isUUID',
+						'isDate', 'isAfter', 'isBefore', 'isIn', 'isCreditCard', 'isISIN', 'isISBN', 'isMobilePhone', 'isJSON',
+						'isMultibyte', 'isAscii', 'isFullWidth', 'isHalfWidth', 'isVariableWidth', 'isSurrogatePair', 'isMongoId',
+						'isCurrency'];
+					return methodNames.map(function (methodName) {
+						return {
+							directiveName: 'ngv' + capitalizeFirstLetter(methodName),
+							validatorName: methodName,
+							validator: $validator[methodName]
+						};
+					});
+				}
+				$validatorBuilder.buildValidators(buildValidatorsArray());
+			}
+		]);
+}());
+(function () {
+	'use strict';
+
 	var _errHead = 'ang-validator: factory-init: $validator: ';
 
 	angular.module('ang-validator')
 		.factory('$validator', [
 			Validator
-		]);
+		])
+		.factory('$ValidatorConstructor', function () {
+			return Validator;
+		});
 
 	function Validator () {
 		function _validations () {
@@ -77,7 +113,14 @@
 				 * @description
 				 * Builds a new validator directive
 				 */
-				buildValidator      : buildValidator
+				buildValidator      : buildValidator,
+				/**
+				 *
+				 * @param {Array<{directiveName: string, validatorName: string, validator: function}>} arrConfig
+				 * @description
+				 * Builds multiple new validator directives
+				 */
+				buildValidators: buildValidators
 			};
 
 			return new ValidatorBuilder();
@@ -135,10 +178,10 @@
 				 * @returns {*}
 				 * @description
 				 * The validator function of the validator directive.
-				 * It first verifies that val exists, or that the
+				 * It first verifies that val exists, or that one of the attributes is ngvRequired
 				 */
 				function validatorFunc (val) {
-					if (element[0].required || val) {
+					if (val || attr.ngvRequired) {
 						var arg = scope.$eval(attr[oConfig.directiveName]);
 						return oConfig.validator(val, arg);
 					}
@@ -164,7 +207,28 @@
 				self.$compileProvider.directive(oConfig.directiveName, self._validatorDirective.bind(self, oConfig));
 
 			}
-		};
+
+			/**
+			 *
+			 * @param {Array<{directiveName: string, validatorName: string, validator: function}>} arrConfig
+			 * @description
+			 * Builds multiple new validator directives
+			 */
+			function buildValidators (arrConfig) {
+				var self = this;
+				var _errMsg = _errHead + 'buildValidators: arrConfig';
+				// Validate arr config
+				self.internalValidation.validateObject(arrConfig, _errMsg);
+				if (!angular.isArray(arrConfig)) {
+					throw new TypeError(_errMsg + ' should be an array');
+				}
+
+				arrConfig.forEach(function (oConfig) {
+					self.buildValidator(oConfig);
+				});
+
+			}
+		}
 	}
 
 

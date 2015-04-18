@@ -6,7 +6,10 @@
 	angular.module('ang-validator')
 		.factory('$validator', [
 			Validator
-		]);
+		])
+		.factory('$ValidatorConstructor', function () {
+			return Validator;
+		});
 
 	function Validator () {
 		function _validations () {
