@@ -3,3 +3,9 @@
    - "0.10"
    - "0.8"
    - "0.6"
+ before_install:
+   - "npm install"
+   - "bower install"
+   - "NODE_ENV=development"
+ scripts:
+   test: "gulp test"
