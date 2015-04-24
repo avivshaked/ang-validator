@@ -25,20 +25,24 @@
 <!--</form>-->
 
 <form name="myForm" ng-controller="Ctrl as ctrl">
-	<input ng-model="email" name="userEmail" ngv-is-email>
-	<p ng-show="myForm.userEmail.$error.isEmail">Not a valid email</p>
-	<br>
-	<label> What is the meaning of life?
-		<input name="answer" ng-model="userAnswer" ngv-equals="42" ngv-required="true">
-		<p ng-show="!myForm.answer.$error.equals">Right!</p>
-	</label>
-	<input name="test" ng-model="test" ngt-test="['a', 'b']" >
-	<br>
-	<label>test matches</label>
-	<input ng-model="value" ngv-matches="'hello/i'">
-	<br>
-	<label>test isIn</label>
-	<input ng-model="isInModel" ngv-is-in="[1,2,3,5]">
+	<!--<input ng-model="email" name="userEmail" ngv-is-email>-->
+	<!--<p ng-show="myForm.userEmail.$error.isEmail">Not a valid email</p>-->
+	<!--<br>-->
+	<!--<label> What is the meaning of life?-->
+		<!--<input name="answer" ng-model="userAnswer" ngv-equals="42" ngv-required="true">-->
+		<!--<p ng-show="!myForm.answer.$error.equals">Right!</p>-->
+	<!--</label>-->
+	<!--<input name="test" ng-model="test" ngt-test="['a', 'b']" >-->
+	<!--<br>-->
+	<!--<label>test matches</label>-->
+	<!--<input ng-model="value" ngv-matches="'hello/i'">-->
+	<!--<br>-->
+	<!--<label>test isIn</label>-->
+	<!--<input ng-model="isInModel" ngv-is-in="[1,2,3,5]">-->
+	<!--<br>-->
+	<label>Test toFloat</label>
+	<input type="text" ng-model="testToString" ngs-to-int="">
+
 </form>
 
 

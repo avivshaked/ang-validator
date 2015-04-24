@@ -24,6 +24,18 @@
 						};
 					});
 				}
+
+				function buildSanitizersArray () {
+					var methodNames = ['toString', 'toDate', 'toFloat', 'toInt', 'toBoolean', 'trim', 'ltrim', 'rtrim',
+					'escape', 'stripLow', 'whitelist', 'blacklist', 'normalizeEmail'];
+					return methodNames.map(function (methodName) {
+						return {
+							directiveName: directiveNormalizer.convertMethodNameToDirectiveName(methodName, 'ngs'),
+							validator: $validator[methodName]
+						};
+					});
+				}
+
 				$validatorBuilder.buildValidators(buildValidatorsArray());
 
 				// isIn is a special case because it needs to get an array as a single argument
@@ -31,12 +43,13 @@
 					directiveName: 'ngvIsIn',
 					validatorName: 'isIn',
 					validator: function () {
-						debugger;
 						var args = Array.prototype.slice.call(arguments);
 						var val = args.shift();
 						return $validator.isIn(val, args);
 					}
 				});
+
+				$validatorBuilder.buildSanitizers(buildSanitizersArray());
 			}
 		]);
 }());
