@@ -19,7 +19,7 @@ module.exports = function (config) {
 			"bower_components/angular/angular.js",
 			"bower_components/angular-mocks/angular-mocks.js",
 			"bower_components/validator-js/validator.min.js",
-			"dist/ang-validator.min.js",
+			"dist/ang-validator.js",
 			"test/**/*.spec.js"
 		],
 
@@ -30,7 +30,9 @@ module.exports = function (config) {
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-		preprocessors: {},
+		preprocessors: {
+			'dist/*.js': ['coverage']
+		},
 
 
 		// test results reporter to use

@@ -96,5 +96,34 @@ describe('validatorDirectives', function () {
 
 	});
 
+	describe('ngvIsIn', function () {
+
+		var element;
+		var scope;
+		var model;
+		var isInArray = [1, 2];
+		var $validator;
+
+		beforeEach(inject(function ($injector) {
+			$validator = $injector.get('$validator');
+			spyOn($validator, 'isIn');
+		}));
+
+		beforeEach(function () {
+			element = angular.element('<input ng-model="model" ngv-is-in="isInArray">');
+			scope = $rootScope.$new();
+			scope.isInArray = isInArray;
+			element = $compile(element)(scope);
+			model = element.controller('ngModel');
+			scope.$digest();
+		});
+
+		it('should not split array into arguments', function () {
+			model.$setViewValue('test');
+			expect($validator.isIn).toHaveBeenCalledWith('test', isInArray);
+		});
+
+	});
+
 
 });

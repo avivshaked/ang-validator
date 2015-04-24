@@ -180,6 +180,43 @@ describe('$validatorBuilder', function () {
 		});
 	});
 
+	describe('buildSanitizers', function () {
+
+		var sanitizers;
+
+		beforeEach(function () {
+			sanitizers = [
+				{
+					directiveName: 'directiveOne',
+					sanitizer: angular.noop
+				},
+				{
+					directiveName: 'directiveTwo',
+					sanitizer: angular.noop
+				}
+			];
+
+			spyOn($validatorBuilder, 'buildSanitizer');
+		});
+
+		it('should throw a Type error if arrConfig is not an array', function () {
+			var err;
+			try {
+				$validatorBuilder.buildSanitizers('test');
+			} catch (e) {
+				err = e;
+			}
+			expect(err instanceof TypeError).toBe(true);
+
+		});
+
+		it('should call $validator.buildSanitizer 2 times', function () {
+			$validatorBuilder.buildSanitizers(sanitizers);
+			expect($validatorBuilder.buildSanitizer.calls.count()).toBe(2);
+		});
+
+	});
+
 	describe('creating a directive', function () {
 
 		var oConfig;

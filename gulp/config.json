@@ -6,5 +6,18 @@
     ],
     "dest": "dist",
     "destName": "ang-validator.js"
+  },
+  "tests": {
+    "testFiles": [
+      "./node_modules/phantomjs-polyfill/bind-polyfill.js",
+      "bower_components/angular/angular.js",
+      "bower_components/angular-mocks/angular-mocks.js",
+      "bower_components/validator-js/validator.min.js",
+      "dist/ang-validator.js",
+      "test/**/*.spec.js"
+    ],
+    "coverageFiles": [
+      "dist/ang-validator.js"
+    ]
   }
 }
