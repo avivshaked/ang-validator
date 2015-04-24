@@ -71,6 +71,7 @@
 
 				isSanitizer = !!isSanitizer;
 
+				/*jshint validthis:true */
 				this.internalValidation.validateObject(oConfig, _errMsg);
 				this.internalValidation.validateStringProperty(oConfig, 'directiveName', _errMsg);
 				this.internalValidation.validateFunctionProperty(oConfig, 'validator', _errMsg);
@@ -89,6 +90,7 @@
 			 * @private
 			 */
 			function _validatorDirective (oConfig) {
+				/*jshint validthis:true */
 				var self = this;
 
 				return {
@@ -127,13 +129,16 @@
 				 * It first verifies that val exists, or that one of the attributes is ngvRequired
 				 */
 				function validatorFunc (val) {
+					/*jshint validthis:true */
+					var self = this;
+
 					if (val || (attr.ngvRequired && oConfig.directiveType === 'validator')) {
 						var arg = scope.$eval(attr[oConfig.directiveName]);
 						if (angular.isArray(arg)) {
 							var args = [];
 							args.push(val);
 							args = args.concat(arg);
-							return oConfig.validator.apply(this, args);
+							return oConfig.validator.apply(self, args);
 						}
 						return oConfig.validator(val, arg);
 					}
@@ -150,6 +155,7 @@
 			 * Builds a new validator directive
 			 */
 			function buildValidator (oConfig) {
+				/*jshint validthis:true */
 				var self = this;
 
 				// Validate oConfig
@@ -169,6 +175,7 @@
 			 * Builds multiple new validator directives
 			 */
 			function buildValidators (arrConfig) {
+				/*jshint validthis:true */
 				var self = this;
 				var _errMsg = _errHead + 'buildValidators: arrConfig';
 				// Validate arr config
@@ -190,6 +197,7 @@
 			 * Builds a new parser directive
 			 */
 			function buildSanitizer (oConfig) {
+				/*jshint validthis:true */
 				var self = this;
 
 				oConfig.validator = oConfig.sanitizer;
@@ -209,6 +217,7 @@
 			 * Builds multiple new parser directives
 			 */
 			function buildSanitizers (arrConfig) {
+				/*jshint validthis:true */
 				var self = this;
 				var _errMsg = _errHead + 'buildSanitizers: arrConfig';
 				// Validate arr config

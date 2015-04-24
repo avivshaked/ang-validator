@@ -94,6 +94,7 @@ describe('$validatorBuilder', function () {
 		});
 	});
 
+
 	describe('_validatorDirective', function () {
 
 		var oConfig;
@@ -125,6 +126,33 @@ describe('$validatorBuilder', function () {
 			expect(linkResult.self).toBe($validatorBuilder);
 			expect(linkResult.oConfig).toBe(oConfig);
 			expect(linkResult.otherStuff).toBe('some other stuff');
+		});
+
+	});
+
+	describe('_validatorLink', function () {
+
+		var model;
+		var validatorFunc;
+		beforeEach(function () {
+			model = {
+				$parsers: {
+					push: jasmine.createSpy('$parsers.push')
+				},
+				$validators: {}
+			};
+			validatorFunc = angular.noop;
+		});
+
+		it('should set model.$validators with a key and function if oConfig.directiveType is "validator"', function () {
+			$validatorBuilder._validatorLink({directiveType: 'validator', validatorName: 'test'}, undefined, undefined, undefined, model);
+			expect(model.$validators.test instanceof Function).toBe(true);
+		});
+
+		it('should invoke $parsers.push with validatorFunc when oConfig.directiveType is "sanitizer"', function () {
+			$validatorBuilder._validatorLink({directiveType: 'sanitizer'}, undefined, undefined, undefined, model);
+			expect(model.$parsers.push).toHaveBeenCalled();
+			expect(model.$parsers.push.calls.allArgs()[0][0] instanceof Function).toBe(true);
 		});
 
 	});
