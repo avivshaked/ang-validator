@@ -1,6 +1,5 @@
 # ang-validator.js #
 An angular wrapper for chriso's [validator.js](https://github.com/chriso/validator.js).
-[test](#toString)
 
 This library offers all of validator.js functionality wrapped into easy to use angular directives.
 All of the functionality can be accessed via $validator service, or via directives.
