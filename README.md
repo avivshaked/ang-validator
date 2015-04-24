@@ -95,6 +95,8 @@ The expression can also be in the form of an object, with direct values or with 
 
 
 ### **Directives** ###
+#### **Validators** ####
+
 **equals** - 
 
  - Description: check if the string matches the comparison.
@@ -415,7 +417,99 @@ The expression can also be in the form of an object, with direct values or with 
 	- **allow_space_after_digits**: boolean Default: false
  - Example1: `<input ng-model=value" ngv-is-currency>`
  - Example2: `<input ng-model=value" ngv-is-currency="{symbol: 'EU', allow_space_after_symbol: true}">`
+
+
+#### **Sanitizers** ####
+
+######**toString**
+
+ - Description: convert the input to a string.
+ - Directive name: **ngs-to-string**
+ - Example: `<input ng-model=model" ngs-to-string>`
  
+#####**toDate**
+
+ - Description: convert the input to a date, or null if the input is not a date.
+ - Directive name: **ngs-to-date**
+ - Example: `<input ng-model=model" ngs-to-date>`
+ 
+#####toFloat 
+
+ - Description: convert the input to a float, or NaN if the input is not a float.
+ - Directive name: **ngs-to-float**
+ - Example: `<input ng-model=model" ngs-to-float>`
+ 
+#####toInt 
+
+ - Description: convert the input to an integer, or NaN if the input is not an integer.
+ - Directive name: **ngs-to-int**
+ - options: **radix** {number=} optional
+ - Example: `<input ng-model=model" ngs-to-int="10">`
+ 
+#####toBoolean 
+
+ - Description: convert the input to a boolean. Everything except for '0', 'false' and '' returns true. In strict mode only '1' and 'true' return true.
+ - Directive name: **ngs-to-boolean**
+ - options: **strict** {boolean=} optional
+ - Example: `<input ng-model=model" ngs-to-boolean>`
+ 
+#####trim 
+
+ - Description: trim characters (whitespace by default) from both sides of the input.
+ - Directive name: **ngs-trim**
+ - options: **chars** {string=} optional
+ - Example: `<input ng-model=model" ngs-trim>`
+ 
+#####ltrim 
+
+ - Description: trim characters (whitespace by default) from the left-side of the input.
+ - Directive name: **ngs-ltrim**
+ - options: **chars** {string=} optional
+ - Example: `<input ng-model=model" ngs-ltrim>`
+ 
+#####rtrim 
+
+ - Description: trim characters (whitespace by default) from the right-side of the input.
+ - Directive name: **ngs-rtrim**
+ - options: **chars** {string=} optional
+ - Example: `<input ng-model=model" ngs-rtrim>`
+ 
+#####escape 
+
+ - Description: replace <, >, &, ', " and / with HTML entities.
+ - Directive name: **ngs-escape**
+ - Example: `<input ng-model=model" ngs-escape>`
+ 
+#####stripLow 
+
+ - Description: remove characters with a numerical value < 32 and 127, mostly control characters. If keep_new_lines is true, newline characters are preserved (\n and \r, hex 0xA and 0xD). Unicode-safe in JavaScript.
+ - Directive name: **ngs-strip-low**
+ - options: **keep_new_lines** {boolean=} optional
+ - Example: `<input ng-model=model" ngs-strip-low>`
+ 
+#####whitelist 
+
+ - Description: remove characters that do not appear in the whitelist. The characters are used in a RegExp and so you will need to escape some chars, e.g. whitelist(input, '\[\]').
+ - Directive name: **ngs-white-list**
+ - options: **chars** {string}
+ - Example: `<input ng-model=model" ngs-white-list="yn">`
+ 
+#####blacklist 
+
+ - Description: remove characters that appear in the blacklist. The characters are used in a RegExp and so you will need to escape some chars, e.g. blacklist(input, '\[\]').
+ - Directive name: **ngs-black-list**
+ - options: **chars** {string}
+ - Example: `<input ng-model=model" ngs-black-list="!@#$">`
+ 
+#####normalizeEmail 
+
+ - Description: canonicalize an email address. options is an object which defaults to { lowercase: true }. With lowercase set to true, the local part of the email address is lowercased for all domains; the hostname is always lowercased and the local part of the email address is always lowercased for hosts that are known to be case-insensitive (currently only GMail). Normalization follows special rules for known providers: currently, GMail addresses have dots removed in the local part and are stripped of tags (e.g. some.one+tag@gmail.com becomes someone@gmail.com) and all @googlemail.com addresses are normalized to @gmail.com.
+ - Directive name: **ngs-normalize-email**
+ - options: **object** - optional
+	- **lowercase**: boolean Default: true
+ - Example: `<input ng-model=model" ngs-normalize-email>`
+ - Example: `<input ng-model=model" ngs-normalize-email="{lowercase: false}">`
+
 ## Adding custom validators ##
 This feature has two advantages to angular's own mechanism. It can be added on the fly (though it is not recommended. It's best to add validators at run phase). The other advantage is its simplicity.
 Using $validatorBuilder.buildValidator method, you need to pass an object that has 3 parameters:
