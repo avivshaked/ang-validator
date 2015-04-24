@@ -31,7 +31,7 @@
 					return methodNames.map(function (methodName) {
 						return {
 							directiveName: directiveNormalizer.convertMethodNameToDirectiveName(methodName, 'ngs'),
-							validator: $validator[methodName]
+							sanitizer: $validator[methodName]
 						};
 					});
 				}
