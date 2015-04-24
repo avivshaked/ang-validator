@@ -10,6 +10,12 @@ This library can be installed via [bower](http://bower.io/).
 
 	$ bower install ang-validator --save
 	
+Another way to install this library is to clone this repository. Then copy the file ang-validator.js or and-validator.min.js from dist folder, and put it in your project.
+
+	$ git clone https://github.com/avivshaked/ang-validator.git
+
+
+	
 	
 ## How to include ##
 First reference chriso's validator.js
@@ -744,3 +750,17 @@ If you want to add multiple sanitizer directives you can use $validatorBuilder.b
 				}
 			]);
 
+
+## Manual build ##
+If you've cloned or forked the repository, and have made changes to the files, use gulp to build. gulp (default) will build the dist files and run tests with coverage.
+
+	$ gulp
+	
+## Gulp commands ##
+
+- **gulp scripts**: Builds the dist files.
+- **gulp test**: Runs all tests on the normal version.
+- **gulp test-minified**: Runs all tests on the minified version.
+- **gulp watch**: Puts watches in place. On script files change, it runs build and both versions of test. On specs change it runs both version of tests. If NODE_ENV is set to production, on test failure gulp will throw and exit.
+- **gulp build**: Runs scripts and both versions of tests.
+- **gulp** (default): Runs build and watch.
