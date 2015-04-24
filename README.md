@@ -5,6 +5,12 @@ An angular wrapper for chriso's validator.js .
 It wraps all of validator.js functionality into easy to use angular directives. 
 It also provides a simple way to add custom angular validators and sanitizers.
 
+## How to install ##
+This library can be installed via [bower](http://bower.io/).
+
+	$ bower install ang-validator --save
+	
+	
 ## How to include ##
 First reference chriso's validator.js
 Then reference ang-validator.js
