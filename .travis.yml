@@ -3,4 +3,4 @@
    - "0.10"
  before_script:
    - 'npm install -g bower'
-   - 'bower install --config.interactive=false'
+   - 'bower install'
