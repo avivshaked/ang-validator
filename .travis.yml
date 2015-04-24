@@ -4,3 +4,4 @@
  before_script:
    - 'npm install -g bower'
    - 'bower install'
+   - 'NODE_ENV=development'
