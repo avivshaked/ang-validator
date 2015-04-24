@@ -18,8 +18,8 @@ module.exports = function (config) {
 			"./node_modules/phantomjs-polyfill/bind-polyfill.js",
 			"bower_components/angular/angular.js",
 			"bower_components/angular-mocks/angular-mocks.js",
-			"bower_components/validator-js/validator.js",
-			"dist/ang-validator.js",
+			"bower_components/validator-js/validator.min.js",
+			"dist/ang-validator.min.js",
 			"test/**/*.spec.js"
 		],
 
