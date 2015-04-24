@@ -30,6 +30,18 @@
 						};
 					});
 				}
+
+				function buildSanitizersArray () {
+					var methodNames = ['toString', 'toDate', 'toFloat', 'toInt', 'toBoolean', 'trim', 'ltrim', 'rtrim',
+					'escape', 'stripLow', 'whitelist', 'blacklist', 'normalizeEmail'];
+					return methodNames.map(function (methodName) {
+						return {
+							directiveName: directiveNormalizer.convertMethodNameToDirectiveName(methodName, 'ngs'),
+							validator: $validator[methodName]
+						};
+					});
+				}
+
 				$validatorBuilder.buildValidators(buildValidatorsArray());
 
 				// isIn is a special case because it needs to get an array as a single argument
@@ -37,12 +49,13 @@
 					directiveName: 'ngvIsIn',
 					validatorName: 'isIn',
 					validator: function () {
-						debugger;
 						var args = Array.prototype.slice.call(arguments);
 						var val = args.shift();
 						return $validator.isIn(val, args);
 					}
 				});
+
+				$validatorBuilder.buildSanitizers(buildSanitizersArray());
 			}
 		]);
 }());
@@ -242,7 +255,21 @@
 				 * @description
 				 * Builds multiple new validator directives
 				 */
-				buildValidators: buildValidators
+				buildValidators: buildValidators,
+				/**
+				 *
+				 * @param {{directiveName: string, validator: function}} oConfig
+				 * @description
+				 * Builds a new parser directive
+				 */
+				buildSanitizer: buildSanitizer,
+				/**
+				 *
+				 * @param {Array<{directiveName: string, validator: function}>} arrConfig
+				 * @description
+				 * Builds multiple new parser directives
+				 */
+				buildSanitizers: buildSanitizers
 			};
 
 			return new ValidatorBuilder();
@@ -251,14 +278,23 @@
 			/**
 			 *
 			 * @param {{directiveName: string, validatorName: string, validator: function}} oConfig
+			 * @param {boolean=} isSanitizer Defaults to false
 			 * @private
 			 */
-			function _validateBuildConfig (oConfig) {
+			function _validateBuildConfig (oConfig, isSanitizer) {
+
 				var _errMsg = _errHead + '_validateBuildConfig: oConfig';
+
+				isSanitizer = !!isSanitizer;
+
 				this.internalValidation.validateObject(oConfig, _errMsg);
 				this.internalValidation.validateStringProperty(oConfig, 'directiveName', _errMsg);
-				this.internalValidation.validateStringProperty(oConfig, 'validatorName', _errMsg);
 				this.internalValidation.validateFunctionProperty(oConfig, 'validator', _errMsg);
+
+
+				if (!isSanitizer) {
+					this.internalValidation.validateStringProperty(oConfig, 'validatorName', _errMsg);
+				}
 			}
 
 
@@ -282,7 +318,7 @@
 
 			/**
 			 *
-			 * @param {{directiveName: string, validatorName: string, validator: function}} oConfig
+			 * @param {{directiveType: string, directiveName: string, validatorName: string, validator: function}} oConfig
 			 * @param {object} scope
 			 * @param {angular.element} element
 			 * @param {object} attr
@@ -291,8 +327,12 @@
 			 */
 			function _validatorLink (oConfig, scope, element, attr, model) {
 
-				// Add validator
-				model.$validators[oConfig.validatorName] = validatorFunc;
+				// Add validator/Sanitizer
+				if (oConfig.directiveType === 'validator') {
+					model.$validators[oConfig.validatorName] = validatorFunc;
+				} else if (oConfig.directiveType === 'sanitizer') {
+					model.$parsers.push(validatorFunc);
+				}
 
 				/**
 				 *
@@ -303,7 +343,7 @@
 				 * It first verifies that val exists, or that one of the attributes is ngvRequired
 				 */
 				function validatorFunc (val) {
-					if (val || attr.ngvRequired) {
+					if (val || (attr.ngvRequired && oConfig.directiveType === 'validator')) {
 						var arg = scope.$eval(attr[oConfig.directiveName]);
 						if (angular.isArray(arg)) {
 							var args = [];
@@ -331,6 +371,8 @@
 				// Validate oConfig
 				self._validateBuildConfig(oConfig);
 
+				oConfig.directiveType = 'validator';
+
 				// Declare a new directive
 				self.$compileProvider.directive(oConfig.directiveName, self._validatorDirective.bind(self, oConfig));
 
@@ -355,6 +397,44 @@
 					self.buildValidator(oConfig);
 				});
 
+			}
+
+			/**
+			 *
+			 * @param {{directiveName: string, validator: function}} oConfig
+			 * @description
+			 * Builds a new parser directive
+			 */
+			function buildSanitizer (oConfig) {
+				var self = this;
+
+				// Validate oConfig
+				self._validateBuildConfig(oConfig, true);
+
+				oConfig.directiveType = 'sanitizer';
+
+				// Declare a new directive
+				self.$compileProvider.directive(oConfig.directiveName, self._validatorDirective.bind(self, oConfig));
+			}
+
+			/**
+			 *
+			 * @param {Array<{directiveName: string, validator: function}>} arrConfig
+			 * @description
+			 * Builds multiple new parser directives
+			 */
+			function buildSanitizers (arrConfig) {
+				var self = this;
+				var _errMsg = _errHead + 'buildSanitizers: arrConfig';
+				// Validate arr config
+				self.internalValidation.validateObject(arrConfig, _errMsg);
+				if (!angular.isArray(arrConfig)) {
+					throw new TypeError(_errMsg + ' should be an array');
+				}
+
+				arrConfig.forEach(function (oConfig) {
+					self.buildSanitizer(oConfig);
+				});
 			}
 		}
 	}

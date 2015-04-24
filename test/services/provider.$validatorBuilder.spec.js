@@ -88,7 +88,7 @@ describe('$validatorBuilder', function () {
 			});
 
 			it('should invoke $validatorBuilder.internalValidation.validateFunctionProperty with oConfig, "sanitizer" and errMsg', function () {
-				expect($validatorBuilder.internalValidation.validateFunctionProperty).toHaveBeenCalledWith(oConfig, 'sanitizer', errMsg);
+				expect($validatorBuilder.internalValidation.validateFunctionProperty).toHaveBeenCalledWith(oConfig, 'validator', errMsg);
 			});
 
 		});
@@ -139,6 +139,31 @@ describe('$validatorBuilder', function () {
 			oConfig = {
 				directiveName: 'test',
 				validatorName: 'test',
+				validator: jasmine.createSpy('validator')
+			};
+		});
+
+		it('should invoke _validateBuildConfig with oConfig', function () {
+			$validatorBuilder.buildValidator(oConfig);
+			expect($validatorBuilder._validateBuildConfig).toHaveBeenCalledWith(oConfig);
+		});
+
+		it('should invoke $compileProvider.directive', function () {
+			$validatorBuilder.buildValidator(oConfig);
+			expect($validatorBuilder.$compileProvider.directive).toHaveBeenCalled();
+			expect($validatorBuilder.$compileProvider.directive.calls.allArgs()[0][0]).toBe('test');
+		});
+	});
+
+	describe('buildSanitizer', function () {
+
+		var oConfig;
+
+		beforeEach(function () {
+			spyOn($validatorBuilder, '_validateBuildConfig');
+			spyOn($validatorBuilder.$compileProvider, 'directive');
+			oConfig = {
+				directiveName: 'test',
 				validator: jasmine.createSpy('validator')
 			};
 		});
