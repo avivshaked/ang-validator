@@ -170,7 +170,7 @@ The expression can also be in the form of an object, with direct values or with 
  - Description: check if the string is an email.
  - Directive name: **ngv-is-email**
  - Validator name: **isEmail**
- - options: **object optional
+ - options: **object** optional
 	- **allow_display_name**: boolean Default: false. If set to true, the validator will also match Display Name `<email-address>`
 	- **allow_utf8_local_part**: boolean Default: true. If set to false, the validator will not allow any non-English UTF8 character in email address' local part. 
  - Example1: `<input ng-model=value" ngv-is-email>`
@@ -181,7 +181,7 @@ The expression can also be in the form of an object, with direct values or with 
  - Description: check if the string is an URL.
  - Directive name: **ngv-is-url**
  - Validator name: **isUrl**
- - options: **object optional
+ - options: **object** optional
  	- **protocols**: Array of strings Default: ['http','https','ftp']
  	- **require_tld**: boolean Default: true
  	- **require_protocol**: boolean Default: false
@@ -198,7 +198,7 @@ The expression can also be in the form of an object, with direct values or with 
  - Description: check if the string is a fully qualified domain name (e.g. domain.com).
  - Directive name: **ngv-is-fqdn**
  - Validator name: **isFqdn**
- - options: **object optional
+ - options: **object** optional
 	- **require_tld**: boolean Default: true
 	- **allow_underscores**: boolean Default: false
  - Example1: `<input ng-model=value" ngv-is-fqdn>`
@@ -270,17 +270,26 @@ The expression can also be in the form of an object, with direct values or with 
 
 #####isInt 
 
- - Description: check if the string is an integer.
+ - Description: check if the string is an integer. options is an object which can contain the keys min and/or max to check the integer is within boundaries (e.g. { min: 10, max: 99 }).
  - Directive name: **ngv-is-int**
  - Validator name: **isInt**
+ - options: **object** optional
+	- **min**: number= optional
+	- **max**: number= optional
  - Example: `<input ng-model=value" ngv-is-int>` 
+ - Example: `<input ng-model=value" ngv-is-int={ min: 10, max: 99 }>` 
+
  
 #####isFloat 
 
- - Description: check if the string is a float.
+ - Description: check if the string is a float. options is an object which can contain the keys min and/or max to validate the float is within boundaries (e.g. { min: 7.22, max: 9.55 }).
  - Directive name: **ngv-is-float**
  - Validator name: **isFloat**
+ - options: **object** optional
+	- **min**: number= optional
+	- **max**: number= optional 
  - Example: `<input ng-model=value" ngv-is-float>` 
+ - Example: `<input ng-model=value" ngv-is-float={ min: 7.22, max: 9.55 }>` 
  
 #####isDivisibleBy 
 
@@ -446,7 +455,7 @@ The expression can also be in the form of an object, with direct values or with 
  - Description: check if the string is a valid currency amount. 
  - Directive name: **ngv-is-currency**
  - Validator name: **isCurrency**
- - options: **object optional
+ - options: **object** optional
 	- **symbol**: string Default: '$'
 	- **require_symbol**: boolean Default: false
 	- **allow_space_after_symbol**: boolean Default: false
