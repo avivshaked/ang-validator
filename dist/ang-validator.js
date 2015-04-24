@@ -37,7 +37,7 @@
 					return methodNames.map(function (methodName) {
 						return {
 							directiveName: directiveNormalizer.convertMethodNameToDirectiveName(methodName, 'ngs'),
-							validator: $validator[methodName]
+							sanitizer: $validator[methodName]
 						};
 					});
 				}
@@ -401,13 +401,14 @@
 
 			/**
 			 *
-			 * @param {{directiveName: string, validator: function}} oConfig
+			 * @param {{directiveName: string, sanitizer: function}} oConfig
 			 * @description
 			 * Builds a new parser directive
 			 */
 			function buildSanitizer (oConfig) {
 				var self = this;
 
+				oConfig.validator = oConfig.sanitizer;
 				// Validate oConfig
 				self._validateBuildConfig(oConfig, true);
 
