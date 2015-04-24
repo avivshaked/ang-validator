@@ -1,12 +1,15 @@
 var karma = require('gulp-karma');
 var gulp = require('gulp');
 
-function testFactory (config) {
+function testFactory (config, onMinified) {
+	onMinified = !!onMinified;
+
 	return test;
 
 	function test () {
 
-		return gulp.src(config.tests.testFiles)
+		var src = onMinified ?  config.tests.minified.testFiles : config.tests.unminified.testFiles
+		return gulp.src(src)
 			.pipe(karma({
 				configFile: 'karma.conf.js',
 				action: 'run'
