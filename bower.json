@@ -1,16 +1,23 @@
 {
   "name": "ang-validator",
-  "version": "0.2.0",
+  "version": "0.3.0",
+  "homepage": "https://github.com/avivshaked/ang-validator",
   "authors": [
     "Aviv Shaked <shaked.aviv1@gmail.com>"
   ],
-  "description": "Angular wrapper for chriso's validator.js",
-  "main": "./dist/ang-validator.js",
+  "description": "Angular wrapper for chriso's validator.js. Angular form validations and sanitizers.",
+  "main": "./dist/ang-validator.min.js",
   "keywords": [
     "angular",
     "form",
     "validator",
-    "sanitizer"
+    "sanitizer",
+    "validation",
+    "validate",
+    "sanitization",
+    "sanitize",
+    "sanitisation",
+    "sanitise"
   ],
   "license": "MIT",
   "ignore": [
