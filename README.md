@@ -8,12 +8,12 @@ All of the functionality can be accessed via $validator service, or via directiv
 First reference chriso's validator.js
 Then reference ang-validator.js
 
-    <script src="/bower_components/validator-js/validator.js"></script>
-    <script src="/bower_components/ang-validator/ang-validator.js"></script>
+	<script src="/bower_components/validator-js/validator.js"></script>
+	<script src="/bower_components/ang-validator/ang-validator.js"></script>
 
 In you module reference ang-validator.js
 
-    angular.module('myApp', ['ang-validator']);
+	angular.module('myApp', ['ang-validator']);
 
 
 ## How to access validator.js functionality ##
@@ -23,27 +23,27 @@ Inject the service anywhere, and call the methods you need.
 Example:
 	
 	angular.module('myApp')
-	    .controller('MyCtrl', [
-	        '$validator'
-	        function ($validator) {
+		.controller('MyCtrl', [
+			'$validator'
+			function ($validator) {
 				this.isValAnEmail = function (val) {
-					return  $validator.isEmail(val);
+					return $validator.isEmail(val);
 				};
-	        }
-	    ]);
-	    
+			}
+		]);
+		
 Example with options: 
 
-		angular.module('myApp')
-    	    .controller('MyCtrl', [
-    	        '$validator'
-    	        function ($validator) {
-    			    this.isValAUrl = function (val) {
-    					return  $validator.isURL(val, {require_tld: false});
-    				   };
-    	        }
-    	    ]);
-    	    
+	angular.module('myApp')
+		.controller('MyCtrl', [
+			'$validator'
+			function ($validator) {
+				this.isValAUrl = function (val) {
+					return $validator.isURL(val, {require_tld: false});
+				};
+			}
+		]);
+
 For any information on chriso's [validator.js](https://github.com/chriso/validator.js) please check out the git.
 
 ## ang-validator validator directives ##
@@ -58,7 +58,7 @@ When the input has a value that is not a valid email, the element will have an n
 If the input has no value, the element will show as valid (like native angular validators). 
 The model on the form will reflect the error when the validation is invalid.
 
-    <form name="myForm">
+	<form name="myForm">
 		<input ng-model="email" name="userEmail" ngv-is-email>
 		<p ng-show="myForm.userEmail.$error.isEmail">Not a valid email</p>
 	</form>
@@ -69,7 +69,7 @@ If you want the validator directive to validate even when the input has no value
 	
 You can also use the directives with options or values. To do this simply add the desired expression to the directive.
 
-    <form name="myForm">
+	<form name="myForm">
 		<label> What is the meaning of life?
 			<input name="answer" ng-model="userAnswer" ngv-equals="42" ngv-required="true">
 			<p ng-show="!myForm.answer.$error.equals">Right!</p>
@@ -94,10 +94,37 @@ The expression can also be in the form of an object, with direct values or with 
 	<input name="homepage" ng-model="ctrl.homepage" ngv-is-url="{protocols: ctrl.allowedProtocolsArray, allow_trailing_dot: true}">
 
 
+## ang-validator sanitizers directives ##
+All of validator.js sanitizers have a correlating angular directive. All the directives have an "ngs" prefix, and then a normalized version of the original method. For example "toInt" is ngs-to-int, and "normalizeEmail" is ngs-normalize-email.
+**To use the directives**, add them as attribute to an input that has an ng-model directive.
+Example:
+
+	<input ng-model="someNumber" ngs-to-int>
+	
+Now this input (or rather its model) has a parser that acts exactly the same as native angular parsers.
+When the input has a value, the model's value will be a number, and in this case, an integer.
+The sanitizer will change only the model value and **not the input's value**.
+	
+You can also use the directives with options or values. To do this simply add the desired expression to the directive.
+
+	<form name="myForm">
+		<label> Please enter you're values a base 16
+			<input name="someHexNumber" ng-model="someHexNumber" ngs-to-int="16">
+		</label>
+	</form>
+
+You don't have to use a value, this is an expression and will be evaluated against the scope. ngs-to-int="ctrl.someVar", means that angular will try to extrapolate the value of ctrl.someVar, and the extrapolated value will be passed to the sanitizer.
+
+If the value of the expression is an array, it will be passed to the sanitizer as individual params.
+
+The expression can also be in the form of an object, with direct values or with references:
+
+	
+	
 ### **Directives** ###
 #### **Validators** ####
 
-**equals** - 
+#####equals 
 
  - Description: check if the string matches the comparison.
  - Directive name: **ngv-equals**
@@ -105,7 +132,7 @@ The expression can also be in the form of an object, with direct values or with 
  - options: **comparison** {string}
  - Example: `<input ng-model=value" ngv-equals="42">`
  
-**contains** - 
+#####contains 
 
  - Description: check if the string contains the seed.
  - Directive name: **ngv-contains**
@@ -113,7 +140,7 @@ The expression can also be in the form of an object, with direct values or with 
  - options: **seed** {string}
  - Example: `<input ng-model=value" ngv-contains="thisword">`
  
-**matches** - 
+#####matches 
  
  - Description: check if string matches the pattern.
  - Directive name: **ngv-matches**
@@ -122,23 +149,23 @@ The expression can also be in the form of an object, with direct values or with 
  - Example1: `<input ng-model=value" ngv-matches="ctrl.regex">`
  - Example2: `<input ng-model=value" ngv-matches="['hello', 'i']">`
  
-**isEmail** - 
+#####isEmail 
 
  - Description: check if the string is an email.
  - Directive name: **ngv-is-email**
  - Validator name: **isEmail**
- - options: **object** - optional
+ - options: **object optional
 	- **allow_display_name**: boolean Default: false. If set to true, the validator will also match Display Name `<email-address>`
 	- **allow_utf8_local_part**: boolean Default: true. If set to false, the validator will not allow any non-English UTF8 character in email address' local part. 
  - Example1: `<input ng-model=value" ngv-is-email>`
  - Example2: `<input ng-model=value" ngv-is-email="{allow_utf8_local_part: false}">`
  
-**isURL** - 
+#####isURL 
  
  - Description: check if the string is an URL.
  - Directive name: **ngv-is-url**
  - Validator name: **isUrl**
- - options: **object** - optional
+ - options: **object optional
  	- **protocols**: Array of strings Default: ['http','https','ftp']
  	- **require_tld**: boolean Default: true
  	- **require_protocol**: boolean Default: false
@@ -150,18 +177,18 @@ The expression can also be in the form of an object, with direct values or with 
  - Example1: `<input ng-model=value" ngv-is-url>`
  - Example2: `<input ng-model=value" ngv-is-url="{require_tld: false, host_blacklist: ctrl.hostBlacklist}">`
 
-**isFQDN** - 
+#####isFQDN 
  
  - Description: check if the string is a fully qualified domain name (e.g. domain.com).
  - Directive name: **ngv-is-fqdn**
  - Validator name: **isFqdn**
- - options: **object** - optional
+ - options: **object optional
 	- **require_tld**: boolean Default: true
 	- **allow_underscores**: boolean Default: false
  - Example1: `<input ng-model=value" ngv-is-fqdn>`
  - Example2: `<input ng-model=value" ngv-is-fqdn="{require_tld: false}">`
-  
-**isIP** - 
+
+#####isIP 
 
  - Description: check if the string is an IP (version 4 or 6).
  - Directive name: **ngv-is-ip**
@@ -169,77 +196,77 @@ The expression can also be in the form of an object, with direct values or with 
  - options: **version** {string} defaults to 4
  - Example: `<input ng-model=value" ngv-is-ip="6">`
  
-**isAlpha** - 
+#####isAlpha 
 
  - Description: check if the string contains only letters (a-zA-Z).
  - Directive name: **ngv-is-alpha**
  - Validator name: **isAlpha**
  - Example: `<input ng-model=value" ngv-is-alpha>`
  
-**isNumeric** - 
+#####isNumeric 
 
  - Description: check if the string contains only letters (a-zA-Z).
  - Directive name: **ngv-is-numeric**
  - Validator name: **isNumeric**
  - Example: `<input ng-model=value" ngv-is-numeric>`
 
-**isAlphanumeric** - 
+#####isAlphanumeric 
 
  - Description: check if the string contains only letters and numbers.
  - Directive name: **ngv-is-alphanumeric**
  - Validator name: **isAlphanumeric**
  - Example: `<input ng-model=value" ngv-is-alphanumeric>` 
  
-**isBase64** - 
+#####isBase64 
 
  - Description: check if a string is base64 encoded.
  - Directive name: **ngv-is-base64**
  - Validator name: **isBase64**
  - Example: `<input ng-model=value" ngv-is-base64>` 
  
-**isHexadecimal** - 
+#####isHexadecimal 
 
  - Description: check if the string is a hexadecimal number.
  - Directive name: **ngv-is-hexadecimal**
  - Validator name: **isHexadecimal**
  - Example: `<input ng-model=value" ngv-is-hexadecimal>` 
  
-**isHexColor** - 
+#####isHexColor 
 
  - Description: check if the string is a hexadecimal color.
  - Directive name: **ngv-is-hexColor**
  - Validator name: **isHexColor**
  - Example: `<input ng-model=value" ngv-is-hexColor>` 
  
-**isLowercase** - 
+#####isLowercase 
 
  - Description: check if the string is lowercase.
  - Directive name: **ngv-is-lowercase**
  - Validator name: **isLowercase**
  - Example: `<input ng-model=value" ngv-is-lowercase>` 
  
-**isUppercase** - 
+#####isUppercase 
 
  - Description: check if the string is uppercase.
  - Directive name: **ngv-is-uppercase**
  - Validator name: **isUppercase**
  - Example: `<input ng-model=value" ngv-is-uppercase>`
-  
-**isInt** - 
+
+#####isInt 
 
  - Description: check if the string is an integer.
  - Directive name: **ngv-is-int**
  - Validator name: **isInt**
  - Example: `<input ng-model=value" ngv-is-int>` 
  
-**isFloat** - 
+#####isFloat 
 
  - Description: check if the string is a float.
  - Directive name: **ngv-is-float**
  - Validator name: **isFloat**
  - Example: `<input ng-model=value" ngv-is-float>` 
  
-**isDivisibleBy** - 
+#####isDivisibleBy 
 
  - Description: check if the string is a number that's divisible by another.
  - Directive name: **ngv-is-divisible-by**
@@ -247,14 +274,14 @@ The expression can also be in the form of an object, with direct values or with 
  - options: **number** {number}
  - Example: `<input ng-model=value" ngv-is-divisible-by="2">` 
 
-**isNull** - 
+#####isNull 
 
  - Description: check if the string is null.
  - Directive name: **ngv-is-null**
  - Validator name: **isNull**
  - Example: `<input ng-model=value" ngv-is-null >` 
  
-**isLength** - 
+#####isLength 
  
  - Description: check if the string's length falls in a range. Note: this function takes into account surrogate pairs.
  - Directive name: **ngv-is-length**
@@ -263,7 +290,7 @@ The expression can also be in the form of an object, with direct values or with 
  - Example1: `<input ng-model=value" ngv-is-length="4">` // Value's length will have to be equal or greater then 4
  - Example2: `<input ng-model=value" ngv-is-length="[4, 8]">` // Value's length will have to be equal or greater then 4 and equal or smaller then 8
  
-**isByteLength** - 
+#####isByteLength 
  
  - Description: check if the string's length (in bytes) falls in a range.
  - Directive name: **ngv-is-byte-length**
@@ -272,22 +299,22 @@ The expression can also be in the form of an object, with direct values or with 
  - Example1: `<input ng-model=value" ngv-is-byte-length="4">` // Value's length will have to be equal or greater then 4
  - Example2: `<input ng-model=value" ngv-is-byte-length="[4, 8]">` // Value's length will have to be equal or greater then 4 and equal or smaller then 8
  
-**isUUID** - 
+#####isUUID 
 
- - Description:  check if the string is a UUID (version 3, 4 or 5).
+ - Description: check if the string is a UUID (version 3, 4 or 5).
  - Directive name: **ngv-is-uuid**
  - Validator name: **isUuid**
  - options: **version** {string=} optional
  - Example: `<input ng-model=value" ngv-is-uuid="3">`
  
-**isDate** - 
+#####isDate 
 
  - Description: check if the string is a date.
  - Directive name: **ngv-is-date**
  - Validator name: **isDate**
  - Example: `<input ng-model=value" ngv-is-date >` 
  
-**isAfter** - 
+#####isAfter 
 
  - Description: check if the string is a date that's after the specified date (defaults to now).
  - Directive name: **ngv-is-after**
@@ -296,37 +323,37 @@ The expression can also be in the form of an object, with direct values or with 
  - Example1: `<input ng-model=value" ngv-is-after >` 
  - Example2: `<input ng-model=value" ngv-is-after="12/12/12" >` 
  
-**isBefore** - 
+#####isBefore 
 
  - Description: check if the string is a date that's before the specified date.
  - Directive name: **ngv-is-before**
  - Validator name: **isBefore**
  - options: **date** {date}
  - Example2: `<input ng-model=value" ngv-is-before="12/12/12" >`
-  
-**isIn** - 
 
- - Description:  check if the string is in a array of allowed values.
+#####isIn 
+
+ - Description: check if the string is in a array of allowed values.
  - Directive name: **ngv-is-in**
  - Validator name: **isIn**
  - options: **values** {Array}
  - Example: `<input ng-model=value" ngv-is-in="['home', 'office', 'pool']">`
 
-**isCreditCard** - 
+#####isCreditCard 
 
- - Description:  check if the string is a credit card.
+ - Description: check if the string is a credit card.
  - Directive name: **ngv-is-credit-card**
  - Validator name: **isCreditCard**
  - Example: `<input ng-model=value" ngv-is-credit-card>`
  
-**isISIN** - 
+#####isISIN 
 
- - Description:  check if the string is a credit card.
+ - Description: check if the string is a credit card.
  - Directive name: **ngv-is-isin**
  - Validator name: **isIsin**
  - Example: `<input ng-model=value" ngv-is-isin>`
  
-**isISBN** - 
+#####isISBN 
 
  - Description: check if the string is an ISBN (version 10 or 13).
  - Directive name: **ngv-is-isbn**
@@ -334,7 +361,7 @@ The expression can also be in the form of an object, with direct values or with 
  - options: **version** {string=} optional (version 10 or 13).
  - Example: `<input ng-model=value" ngv-is-isbn="13">`
  
-**isMobilePhone** - 
+#####isMobilePhone 
 
  - Description: check if the string is a mobile phone number, (locale is one of ['zh-CN', 'en-ZA', 'en-AU', 'en-HK', 'pt-PT', 'fr-FR', 'el-GR', 'en-GB', 'en-US', 'en-ZM']).
  - Directive name: **ngv-is-mobile-phone**
@@ -342,68 +369,68 @@ The expression can also be in the form of an object, with direct values or with 
  - options: **local** {string} Needs to be one of ['zh-CN', 'en-ZA', 'en-AU', 'en-HK', 'pt-PT', 'fr-FR', 'el-GR', 'en-GB', 'en-US', 'en-ZM']
  - Example: `<input ng-model=value" ngv-is-mobile=phone="en-US">`
  
-**isJSON** - 
+#####isJSON 
 
  - Description: check if the string is valid JSON (note: uses JSON.parse).
  - Directive name: **ngv-is-json**
  - Validator name: **isJson**
  - Example: `<input ng-model=value" ngv-is-json>`
  
-**isMultibyte** - 
+#####isMultibyte 
 
  - Description: check if the string contains one or more multibyte chars.
  - Directive name: **ngv-is-multibyte**
  - Validator name: **isMultibyte**
  - Example: `<input ng-model=value" ngv-is-multibyte>`
  
-**isAscii** - 
+#####isAscii 
 
  - Description: check if the string contains ASCII chars only.
  - Directive name: **ngv-is-ascii**
  - Validator name: **isAscii**
  - Example: `<input ng-model=value" ngv-is-ascii>`
  
-**isFullWidth** - 
+#####isFullWidth 
 
  - Description: check if the string contains any full-width chars.
  - Directive name: **ngv-is-full-width**
  - Validator name: **isFullWidth**
  - Example: `<input ng-model=value" ngv-is-full-width>`
  
-**isHalfWidth** - 
+#####isHalfWidth 
 
  - Description: check if the string contains any half-width chars.
  - Directive name: **ngv-is-half-width**
  - Validator name: **isHalfWidth**
  - Example: `<input ng-model=value" ngv-is-half-width>`
  
-**isVariableWidth** - 
+#####isVariableWidth 
 
  - Description: check if the string contains a mixture of full and half-width chars.
  - Directive name: **ngv-is-variable-width**
  - Validator name: **isVariableWidth**
  - Example: `<input ng-model=value" ngv-is-variable-width>`
  
-**isSurrogatePair** - 
+#####isSurrogatePair 
 
  - Description: check if the string contains any surrogate pairs chars.
  - Directive name: **ngv-is-surrogate-pair**
  - Validator name: **isSurrogatePair**
  - Example: `<input ng-model=value" ngv-is-surrogate-pair>`
  
-**isMongoId** - 
+#####isMongoId 
 
  - Description: check if the string is a valid hex-encoded representation of a MongoDB ObjectId.
  - Directive name: **ngv-is-mongo-id**
  - Validator name: **isMongoId**
  - Example: `<input ng-model=value" ngv-is-mongo-id>`
  
-**isCurrency** - 
+#####isCurrency 
  
  - Description: check if the string is a valid currency amount. 
  - Directive name: **ngv-is-currency**
  - Validator name: **isCurrency**
- - options: **object** - optional
+ - options: **object optional
 	- **symbol**: string Default: '$'
 	- **require_symbol**: boolean Default: false
 	- **allow_space_after_symbol**: boolean Default: false
@@ -427,7 +454,7 @@ The expression can also be in the form of an object, with direct values or with 
  - Directive name: **ngs-to-string**
  - Example: `<input ng-model=model" ngs-to-string>`
  
-#####**toDate**
+#####toDate
 
  - Description: convert the input to a date, or null if the input is not a date.
  - Directive name: **ngs-to-date**
@@ -557,12 +584,12 @@ Say we would want a validator that is valid when an number is between min and ma
 				
 				// Second way to do it
 				$validatorBuilder.buildValidator({
-                    directiveName: 'isBetween',
-                    validatorName: 'between',
-                    validator: function (val, options) {
-                        return val >= options.min && val <= options.max;
-                    }
-                });
+					directiveName: 'isBetween',
+					validatorName: 'between',
+					validator: function (val, options) {
+						return val >= options.min && val <= options.max;
+					}
+				});
 			}
 		]);
 		
@@ -574,47 +601,139 @@ The difference in the two ways to do it is expressed in the way that options are
 If you want to add multiple validator directives you can use $validatorBuilder.buildValidators which takes an array of the validator objects.
 
 		angular.module('myApp')
-    		.run([
-    			'$validatorBuilder',
-    			function ($validatorBuilder) {
-    				$validatorBuilder.buildValidators([
-	                    {
-	                        directiveName: 'eight',
-	                        validatorName: 'eight',
-	                        validator: function (val) {
-	                            return val===8;
-	                        }
-	                    },
-	                    {
-                            directiveName: 'isBetween',
-                            validatorName: 'between',
-                            validator: function (val, min, max) {
-                                return val >= min && val <= max;
-                        }
-    				]);
-    			}
-    		]);
+			.run([
+				'$validatorBuilder',
+	 			function ($validatorBuilder) {
+					$validatorBuilder.buildValidators([
+						{
+							directiveName: 'eight',
+							validatorName: 'eight',
+							validator: function (val) {
+								return val===8;
+							}
+						},
+						{
+							directiveName: 'isBetween',
+							validatorName: 'between',
+							validator: function (val, min, max) {
+								return val >= min && val <= max;
+						}
+					]);
+				}
+			]);
 
 	
 You can use $validator.extend method to expand the functionality of validator.js. This makes the code more testable.
 
 		angular.module('myApp')
-    		.run([
-    		    '$validator',
-    			'$validatorBuilder',
-    			function ($validator, $validatorBuilder) {
-    			
-    			    // This will allow you to unit test the validator without having to inject it in an element.
-    			    // It also adheres to the separation of control principle.
-    			    $validator.extend('eight', function (val) {
-    			        return val===8;
-    			    });
-    			    
-    			    
-    				$validatorBuilder.buildValidator({
-    					directiveName: 'eight',
-    					validatorName: 'eight',
-    					validator: $validator.eight
-    				});
-    			}
-    		]);
+			.run([
+				'$validator',
+				'$validatorBuilder',
+				function ($validator, $validatorBuilder) {
+				
+					// This will allow you to unit test the validator without having to inject it in an element.
+					// It also adheres to the separation of control principle.
+					$validator.extend('eight', function (val) {
+						return val===8;
+					});
+					
+					
+					$validatorBuilder.buildValidator({
+						directiveName: 'eight',
+						validatorName: 'eight',
+						validator: $validator.eight
+					});
+				}
+			]);
+
+## Adding custom sanitizers ##
+This feature has two advantages to angular's own mechanism. It can be added on the fly (though it is not recommended. It's best to add validators at run phase). The other advantage is its simplicity.
+Using $validatorBuilder.buildSanitizer method, you need to pass an object that has 2 parameters:
+
+ - directiveName: {string} will be normalized. i.e. ngDirective will be normalized to ng-directive.
+ - sanitizer: {function} the function takes ({*}value, {*=} option) or if passed an array as option then ({*} value, [arg1 ...[, args]]). The function needs to return a value. If the returned value is undefined, angular will understand an error has occurred in the parser.
+
+example1: noHello.
+
+Say we would want a sanitizer that puts good-bye in our model for every hello
+
+script
+
+	angular.module('myApp')
+		.run([
+			'$validatorBuilder',
+			function ($validatorBuilder) {
+				$validatorBuilder.buildSanitizer({
+					directiveName: 'noHello',
+					sanitizer: function (val) {
+						var pattern = /hello/g
+						return val.replace(pattern, 'goodbye');
+					}
+				});
+			}
+		]);
+		
+		
+html
+
+	<input type="text" ngs-no-hello>
+	
+Now for each 'hello' the model will have the value 'goodbye' so if the user has entered 'hello world' the model will actually hold 'goodbye world'
+
+
+example2: noHello.
+
+Say we would want a sanitizer that puts some value in our model for every hello
+
+script
+
+	angular.module('myApp')
+		.run([
+			'$validatorBuilder',
+			function ($validatorBuilder) {
+				$validatorBuilder.buildSanitizer({
+					directiveName: 'noHello',
+					sanitizer: function (val, replaceWith) {
+						var pattern = /hello/g
+						return val.replace(pattern, replaceWith);
+					}
+				});
+			}
+		]);
+		
+		
+html
+
+	<input type="text" ngs-no-hello="fair well"> 
+	<!-- will pass "fair well" to the sanitizer -->
+	
+	<input type="text" ngs-no-hello="ctrl.replaceHello"> 
+	<!-- will pass the value of replaceHello on the controller -->
+	
+Now for each "hello" the user enters in the input, a "fair well" or the value of replaceHello will be in the model.
+	
+If you want to add multiple sanitizer directives you can use $validatorBuilder.buildSanitizers which takes an array of the sanitizer objects.
+
+		angular.module('myApp')
+			.run([
+				'$validatorBuilder',
+				function ($validatorBuilder) {
+					$validatorBuilder.buildValidators([
+						{
+							directiveName: 'noHello',
+							sanitizer: function (val, replaceWith) {
+								var pattern = /hello/g;
+								return val.replace(pattern, replaceWith);
+							}
+						},
+						{
+							directiveName: 'noGoodbye',
+							sanitizer: function (val, replaceWith) {
+								var pattern = /goodbye/g;
+								return val.replace(pattern, replaceWith);
+							}
+						}
+					]);
+				}
+			]);
+
