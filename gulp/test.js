@@ -15,8 +15,12 @@ function testFactory (config, onMinified) {
 				action: 'run'
 			}))
 			.on('error', function(err) {
-				// Make sure failed tests cause gulp to exit non-zero
-				throw err;
+				if(process.env.NODE_ENV === 'production') {
+					// Make sure failed tests cause gulp to exit non-zero
+					throw err;
+				} else {
+					console.error(err);
+				}
 			});
 	}
 }

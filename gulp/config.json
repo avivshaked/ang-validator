@@ -27,6 +27,9 @@
         "dist/ang-validator.min.js",
         "test/**/*.spec.js"
       ]
-    }
+    },
+    "specsSrc": [
+      "test/**/*.spec.js"
+    ]
   }
 }
