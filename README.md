@@ -1,6 +1,5 @@
 # ang-validator.js #
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url] [![Downloads][downloads-image]][npm-url]
-
+[![Build Status](https://travis-ci.org/avivshaked/ang-validator.svg?branch=master)](https://travis-ci.org/avivshaked/ang-validator)
 
 An angular wrapper for chriso's [validator.js](https://github.com/chriso/validator.js).
 
