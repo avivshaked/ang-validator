@@ -83,7 +83,7 @@ describe('validatorDirectives', function () {
 		var element;
 		var scope;
 		var model;
-		it('should have a model that has a parser array where the first member refers the $validator function', function () {
+		it('should have a model that has a parser array with one parser', function () {
 			methodNames.forEach(function (methodName, index) {
 				element = angular.element('<input ng-model="model" ' + htmlDirectiveNames[index] + '>');
 				scope = $rootScope.$new();
