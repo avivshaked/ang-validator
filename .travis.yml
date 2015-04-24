@@ -1,12 +1,6 @@
  language: node_js
  node_js:
    - "0.10"
-   - "0.8"
-   - "0.6"
  before_script:
-   - npm install -g bower
-   - bower install
- before_install:
-   - "NODE_ENV=development"
- scripts:
-   test: "gulp test"
+   - 'npm install -g bower'
+   - 'bower install --config.interactive=false'
