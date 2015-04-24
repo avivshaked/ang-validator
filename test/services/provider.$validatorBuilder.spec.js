@@ -36,26 +36,61 @@ describe('$validatorBuilder', function () {
 			spyOn($validatorBuilder.internalValidation, 'validateStringProperty');
 			spyOn($validatorBuilder.internalValidation, 'validateFunctionProperty');
 
-			errMsg = 'ang-validator: $validatorBuilder: _validateBuildConfig: oConfig';
-			oConfig = {};
-			$validatorBuilder._validateBuildConfig(oConfig);
 		});
 
 
-		it('should invoke $validatorBuilder.internalValidation.validateObject with oConfig and errMsg', function () {
-			expect($validatorBuilder.internalValidation.validateObject).toHaveBeenCalledWith(oConfig, errMsg);
+		describe('not provided with isSanitizer', function () {
+
+			beforeEach(function () {
+
+				errMsg = 'ang-validator: $validatorBuilder: _validateBuildConfig: oConfig';
+				oConfig = {};
+				$validatorBuilder._validateBuildConfig(oConfig);
+			});
+
+			it('should invoke $validatorBuilder.internalValidation.validateObject with oConfig and errMsg', function () {
+				expect($validatorBuilder.internalValidation.validateObject).toHaveBeenCalledWith(oConfig, errMsg);
+			});
+
+			it('should invoke $validatorBuilder.internalValidation.validateStringProperty with oConfig, "directiveName" and errMsg', function () {
+				expect($validatorBuilder.internalValidation.validateStringProperty).toHaveBeenCalledWith(oConfig, 'directiveName', errMsg);
+			});
+
+			it('should invoke $validatorBuilder.internalValidation.validateStringProperty with oConfig, "validatorName" and errMsg', function () {
+				expect($validatorBuilder.internalValidation.validateStringProperty).toHaveBeenCalledWith(oConfig, 'validatorName', errMsg);
+			});
+
+			it('should invoke $validatorBuilder.internalValidation.validateFunctionProperty with oConfig, "validator" and errMsg', function () {
+				expect($validatorBuilder.internalValidation.validateFunctionProperty).toHaveBeenCalledWith(oConfig, 'validator', errMsg);
+			});
 		});
 
-		it('should invoke $validatorBuilder.internalValidation.validateStringProperty with oConfig, "directiveName" and errMsg', function () {
-			expect($validatorBuilder.internalValidation.validateStringProperty).toHaveBeenCalledWith(oConfig, 'directiveName', errMsg);
-		});
 
-		it('should invoke $validatorBuilder.internalValidation.validateStringProperty with oConfig, "validatorName" and errMsg', function () {
-			expect($validatorBuilder.internalValidation.validateStringProperty).toHaveBeenCalledWith(oConfig, 'validatorName', errMsg);
-		});
+		describe('provided with isSanitizer set to true', function () {
 
-		it('should invoke $validatorBuilder.internalValidation.validateFunctionProperty with oConfig, "validator" and errMsg', function () {
-			expect($validatorBuilder.internalValidation.validateFunctionProperty).toHaveBeenCalledWith(oConfig, 'validator', errMsg);
+			beforeEach(function () {
+
+				errMsg = 'ang-validator: $validatorBuilder: _validateBuildConfig: oConfig';
+				oConfig = {};
+				$validatorBuilder._validateBuildConfig(oConfig, true);
+			});
+
+			it('should invoke $validatorBuilder.internalValidation.validateObject with oConfig and errMsg', function () {
+				expect($validatorBuilder.internalValidation.validateObject).toHaveBeenCalledWith(oConfig, errMsg);
+			});
+
+			it('should invoke $validatorBuilder.internalValidation.validateStringProperty with oConfig, "directiveName" and errMsg', function () {
+				expect($validatorBuilder.internalValidation.validateStringProperty).toHaveBeenCalledWith(oConfig, 'directiveName', errMsg);
+			});
+
+			it('should not invoke $validatorBuilder.internalValidation.validateStringProperty', function () {
+				expect($validatorBuilder.internalValidation.validateStringProperty.calls.count()).toBe(1);
+			});
+
+			it('should invoke $validatorBuilder.internalValidation.validateFunctionProperty with oConfig, "sanitizer" and errMsg', function () {
+				expect($validatorBuilder.internalValidation.validateFunctionProperty).toHaveBeenCalledWith(oConfig, 'sanitizer', errMsg);
+			});
+
 		});
 	});
 

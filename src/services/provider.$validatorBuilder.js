@@ -48,14 +48,24 @@
 			/**
 			 *
 			 * @param {{directiveName: string, validatorName: string, validator: function}} oConfig
+			 * @param {boolean=} isSanitizer Defaults to false
 			 * @private
 			 */
-			function _validateBuildConfig (oConfig) {
+			function _validateBuildConfig (oConfig, isSanitizer) {
+
 				var _errMsg = _errHead + '_validateBuildConfig: oConfig';
+
+				isSanitizer = !!isSanitizer;
+
 				this.internalValidation.validateObject(oConfig, _errMsg);
 				this.internalValidation.validateStringProperty(oConfig, 'directiveName', _errMsg);
-				this.internalValidation.validateStringProperty(oConfig, 'validatorName', _errMsg);
-				this.internalValidation.validateFunctionProperty(oConfig, 'validator', _errMsg);
+
+				if (!isSanitizer) {
+					this.internalValidation.validateStringProperty(oConfig, 'validatorName', _errMsg);
+					this.internalValidation.validateFunctionProperty(oConfig, 'validator', _errMsg);
+				} else {
+					this.internalValidation.validateFunctionProperty(oConfig, 'sanitizer', _errMsg);
+				}
 			}
 
 
