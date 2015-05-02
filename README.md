@@ -1,7 +1,7 @@
 # ang-validator.js #
 [![Build Status](https://travis-ci.org/avivshaked/ang-validator.svg?branch=master)](https://travis-ci.org/avivshaked/ang-validator)
 
-An angular module that offers a big set of validators and sanitizers angular directives. It also provides an easy way to add your own custom validators and sanitizers. All validators and sanitizers interact seamlessly with angular's native validation. 
+An angular module that offers a big set of validator and sanitizer directives. It also provides an easy way to add you own custom validators and sanitizers. All validators and sanitizers interact seamlessly with angular's native validation. 
 
 This library uses chriso's [validator.js](https://github.com/chriso/validator.js) as a 'validation-engine' and exposes all of its functionality via angular directives and $validator object.
 

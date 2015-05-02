@@ -5,7 +5,7 @@
   "authors": [
     "Aviv Shaked <shaked.aviv1@gmail.com>"
   ],
-  "description": "Angular wrapper for chriso's validator.js. Angular form validations and sanitizers.",
+  "description": "An angular module that offers a big set of validator and sanitizer directives. It also provides an easy way to add you own custom validators and sanitizers. All validators and sanitizers interact seamlessly with angular's native validation.",
   "main": "./dist/ang-validator.min.js",
   "keywords": [
     "angular",
